@@ -6,7 +6,7 @@
 <meta name="description" content="Data Mining Chapter 2 Part A taught from scratch: data & attribute types, statistics, and similarity/distance measures — with analogies, worked solutions, and theory + math practice.">
 <meta name="color-scheme" content="dark light">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>%F0%9F%93%8A</text></svg>">
-<title>Data Mining — Midterm (Ch. 2 &amp; 3) · full study deck</title>
+<title>Data Mining — Midterm (Ch. 1 &amp; 2) · full study deck</title>
 <style>
   :root{
     --bg:#0e1016; --panel:#181b24; --panel2:#1f2330; --ink:#e7e9ee; --muted:#9aa3b2;
@@ -242,6 +242,13 @@ body.rot .rotexit{display:inline-flex;position:fixed;z-index:80;top:9px;right:9p
   <div class="row">
     <span class="brand">DM · Midterm</span>
     <div class="navchips" id="nav">
+      <a href="#c1-why">Why DM</a>
+      <a href="#c1-kdd">KDD steps</a>
+      <a href="#c1-view">View &amp; origins</a>
+      <a href="#c1-tasks">DM tasks</a>
+      <a href="#c1-classification">Classification</a>
+      <a href="#c1-clustering">Clustering</a>
+      <a href="#c1-association">Association</a>
       <a href="#intro">What is data</a>
       <a href="#types">Attribute types</a>
       <a href="#center">Averages</a>
@@ -269,18 +276,20 @@ body.rot .rotexit{display:inline-flex;position:fixed;z-index:80;top:9px;right:9p
 <div class="lesson">
 
   <header class="hero">
-    <h1>Data Mining — Midterm, taught from zero (Chapters 2 &amp; 3)</h1>
+    <h1>Data Mining — Midterm, taught from zero (Chapters 1 &amp; 2)</h1>
     <div>
-      <span class="pill p-red">Midterm · Ch 2 + Ch 3</span>
-      <span class="pill p-blue">Data · Stats · Similarity · Preprocessing</span>
+      <span class="pill p-red">Midterm · Ch 1 + Ch 2 (A &amp; B)</span>
+      <span class="pill p-blue">Intro · Data · Stats · Similarity · Preprocessing</span>
       <span class="pill p-grn">Never read a line? Start here.</span>
     </div>
-    <p class="src">The whole DM midterm in one deck — assuming you know <em>nothing</em>. Part 1: what data
-    really is, the attribute types and the descriptive statistics. Part 2: how we measure "how similar are
-    two things" (distance, binary/nominal, cosine). Part 3: the data-preprocessing pipeline — cleaning,
-    integration, reduction and normalization. Every worked number was recomputed and checked. Based on the
-    course slides (Dr. M. Kamal Hossen, CUET) &amp; Han, Pei &amp; Tong / Han &amp; Kamber,
-    <em>Data Mining: Concepts and Techniques</em>.</p>
+    <p class="src">The whole DM midterm (weeks 1–4) in one deck — assuming you know <em>nothing</em>.
+    <b>Chapter 1</b>: what data mining even is — why we do it, the KDD pipeline, and the tasks
+    (classification, clustering, association). <b>Chapter 2 Part A</b>: what data really is — attribute
+    types, descriptive statistics, and how we measure "how similar are two things" (distance,
+    binary/nominal, cosine). <b>Chapter 2 Part B</b>: the data-preprocessing pipeline — cleaning,
+    integration, reduction and normalization. Every worked number was recomputed and checked. Built to
+    follow the exam suggestion. Based on the course slides (Dr. M. Kamal Hossen, CUET) &amp; Han, Pei &amp;
+    Tong / Han &amp; Kamber, <em>Data Mining: Concepts and Techniques</em>.</p>
     <div class="toolbar">
       <button class="btn primary" onclick="window.print()">🖨️ Save as PDF</button>
       <button class="btn" onclick="setAll(true)">Show all answers</button>
@@ -288,9 +297,208 @@ body.rot .rotexit{display:inline-flex;position:fixed;z-index:80;top:9px;right:9p
     </div>
   </header>
 
+  <!-- ==================== CHAPTER 1 · INTRODUCTION ==================== -->
+  <section id="c1-why">
+    <h2><span class="kicker">Chapter 1 · the big picture</span>Why data mining — and what it actually is</h2>
+    <div class="why"><span class="tag">Why we care</span>
+      The world stopped running out of data a long time ago. E-commerce, web transactions, remote sensors,
+      bioinformatics, YouTube uploads — every domain now drowns in it. The problem flipped: not "how do we
+      get data?" but "we have <em>too much</em> — how do we find the useful patterns buried in it?" That gap
+      is what data mining exists to fill.</div>
+
+    <div class="facts"><span class="tag">Hard facts — the data explosion (exam loves these exact numbers)</span>
+    <table><tbody>
+      <tr><td>Walmart</td><td>≈ <b>20 million</b> transactions per day</td></tr>
+      <tr><td>AT&amp;T</td><td><b>300 million</b> calls per day</td></tr>
+      <tr><td>Mobil (oil)</td><td>geological databases exceeding <b>100 terabytes</b></td></tr>
+      <tr><td>NASA (EOS project)</td><td><b>50 gigabytes</b> of data <b>every hour</b></td></tr>
+    </tbody></table></div>
+
+    <h3>What <em>is</em> data mining?</h3>
+    <div class="def"><span class="tag">📌 Definition — memorise the four adjectives</span>
+      <b>Data mining</b> is the extraction of <b>interesting</b> — that is, <b>non-trivial, implicit,
+      previously unknown and potentially useful</b> — patterns or knowledge from huge amounts of data.
+      The four words in bold are worth marks; examiners pick them out one by one.</div>
+    <p>It goes by many other names, and any of them can appear in a "give alternative names" question:
+      <b>knowledge discovery from/in databases (KDD)</b>, knowledge extraction, data/pattern analysis,
+      <b>data archaeology</b>, <b>data dredging</b>, information harvesting, and <b>business intelligence</b>.</p>
+    <div class="hook"><span>Data mining = <b>digging previously-unknown patterns out of a mountain of data</b>.
+      If you already knew it or could just look it up, it isn't mining.</span></div>
+
+    <h3>What is <em>not</em> data mining?</h3>
+    <p>This contrast is a favourite short question. The trick: a plain <b>lookup or query retrieves facts
+      that are already stored and known</b>. Data mining <b>discovers patterns nobody put there on purpose</b>.</p>
+    <table>
+      <tr><th>NOT data mining (simple retrieval)</th><th>IS data mining (pattern discovery)</th></tr>
+      <tr><td>Look up a phone number in a directory</td><td>Discover that certain surnames cluster by region
+        (O'Brien, O'Reilly… concentrate around Boston)</td></tr>
+      <tr><td>Query a search engine for "Amazon"</td><td>Discover groups of similar documents on the web</td></tr>
+    </table>
+    <div class="tip"><span class="tag">🎯 Exam tip</span>
+      "Differentiate data mining from a database query." Answer in one sentence: a query <b>returns what is
+      already known and stored</b>; data mining <b>uncovers new, implicit patterns</b> the data was never
+      explicitly labelled with.</div>
+  </section>
+
+  <section id="c1-kdd">
+    <h2><span class="kicker">Chapter 1 · the pipeline</span>Knowledge discovery (KDD) — the steps</h2>
+    <div class="why"><span class="tag">Why we care</span>
+      Data mining is not one magic button — it's <em>one step</em> inside a longer pipeline called
+      <b>Knowledge Discovery from Data (KDD)</b>. Slides often use "data mining" and "KDD" as synonyms, but
+      strictly, mining is the core step and KDD is the whole journey from raw data to usable knowledge.</div>
+
+    <div class="def"><span class="tag">📌 The 7 KDD steps (from the textbook) — in order</span>
+      <b>1. Data cleaning</b> (remove noise, fix inconsistencies) → <b>2. Data integration</b> (combine
+      multiple sources) → <b>3. Data selection</b> (pick the relevant data) → <b>4. Data transformation</b>
+      (normalise / aggregate into mineable form) → <b>5. Data mining</b> (apply the algorithm to extract
+      patterns) → <b>6. Pattern evaluation</b> (keep only the genuinely interesting patterns) →
+      <b>7. Knowledge presentation</b> (visualise / report it).</div>
+    <div class="hook"><span>Steps 1–4 are all <b>preprocessing</b> (that's the whole of Chapter 2 Part B!),
+      step 5 is the actual <b>mining</b>, steps 6–7 turn patterns into <b>knowledge</b>. Clean → Integrate →
+      Select → Transform → <b>Mine</b> → Evaluate → Present.</span></div>
+
+    <h3>The lecturer's shorter "data mining process"</h3>
+    <p>The slides also give a compact 4-step working loop for a single mining project:</p>
+    <ol>
+      <li><b>Understand the domain</b> — know the problem you're solving.</li>
+      <li><b>Create a dataset</b> — select the interesting attributes, then clean and preprocess.</li>
+      <li><b>Choose the data-mining task and a specific algorithm.</b></li>
+      <li><b>Interpret the results</b> — and if they're weak, loop back to step 2.</li>
+    </ol>
+    <div class="tip"><span class="tag">🎯 Exam tip</span>
+      If a question says "explain the steps of knowledge discovery," give the <b>7-step KDD list</b> and note
+      that data mining is the essential core step, not the whole process.</div>
+  </section>
+
+  <section id="c1-view">
+    <h2><span class="kicker">Chapter 1 · many angles</span>The multi-dimensional view, origins &amp; uses</h2>
+    <p>Data mining is an <b>interdisciplinary field</b> — you can look at it through four lenses. This table
+      is a classic "describe the multi-dimensional view of data mining" answer.</p>
+    <table>
+      <tr><th>Dimension</th><th>Examples</th></tr>
+      <tr><td><b>Data to be mined</b></td><td>relational databases, data warehouses, transactional data,
+        streams, spatiotemporal, text/web, social networks</td></tr>
+      <tr><td><b>Knowledge / functions</b></td><td>characterization, discrimination, association,
+        classification, clustering, outlier analysis</td></tr>
+      <tr><td><b>Techniques used</b></td><td>machine learning, statistics, pattern recognition,
+        visualization, high-performance computing</td></tr>
+      <tr><td><b>Applications</b></td><td>retail, telecommunication, banking, fraud analysis, molecular
+        biology</td></tr>
+    </table>
+
+    <h3>Origins — where the ideas come from</h3>
+    <p>Data mining draws on four older fields: <b>machine learning / AI</b>, <b>pattern recognition</b>,
+      <b>statistics</b>, and <b>database systems</b>. What makes it its own field is that it must handle
+      things those fields alone did not:</p>
+    <ul>
+      <li>the <b>enormity (sheer volume)</b> of data,</li>
+      <li>the <b>high dimensionality</b> of data,</li>
+      <li>the <b>heterogeneous, distributed</b> nature of data.</li>
+    </ul>
+
+    <h3>Applications you can name</h3>
+    <div class="facts"><span class="tag">Hard facts — five example applications</span>
+    <table><tbody>
+      <tr><td>1. Fraud detection</td><td>credit cards, phone cards</td></tr>
+      <tr><td>2. Marketing</td><td>customer targeting</td></tr>
+      <tr><td>3. Data warehousing</td><td>Walmart</td></tr>
+      <tr><td>4. Astronomy</td><td>—</td></tr>
+      <tr><td>5. Molecular biology</td><td>—</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="c1-tasks">
+    <h2><span class="kicker">Chapter 1 · what DM does</span>Data-mining tasks: predictive vs descriptive</h2>
+    <div class="why"><span class="tag">Why we care</span>
+      Every mining task falls into one of two buckets. Knowing which bucket a task belongs to is a guaranteed
+      short question, and it decides whether you need labelled data or not.</div>
+    <table>
+      <tr><th>Predictive tasks</th><th>Descriptive tasks</th></tr>
+      <tr><td>Use some attributes to <b>predict unknown / future</b> values of another attribute.</td>
+          <td>Find <b>human-interpretable patterns</b> that describe the data.</td></tr>
+      <tr><td>Classification · Regression · Deviation (anomaly) detection</td>
+          <td>Association discovery · Clustering · Summarization</td></tr>
+    </table>
+    <div class="def"><span class="tag">📌 The five tasks, defined in one line each</span>
+      <b>Classification</b> — map an item into one of a set of <b>predefined classes</b>.
+      <b>Regression</b> — map an item to a <b>real value</b>.
+      <b>Clustering</b> — group similar items (no predefined classes).
+      <b>Associations</b> — find significant dependencies between attributes.
+      <b>Summarization</b> — find a compact description of the dataset.</div>
+
+    <h3>Common methods (which algorithm for which job)</h3>
+    <table>
+      <tr><th>Method</th><th>Used for</th></tr>
+      <tr><td>Decision tree classifiers</td><td>modelling / classification</td></tr>
+      <tr><td>Association rules</td><td>finding associations between sets of attributes</td></tr>
+      <tr><td>Sequential patterns</td><td>temporal associations in time series</td></tr>
+      <tr><td>Hierarchical clustering</td><td>grouping customers, web users, etc.</td></tr>
+    </table>
+    <div class="hook"><span><b>Predict</b>ive needs a <b>target to predict</b> (classification, regression).
+      <b>Descr</b>iptive just <b>describes structure</b> (clustering, association). Prediction has an answer
+      key; description doesn't.</span></div>
+  </section>
+
+  <section id="c1-classification">
+    <h2><span class="kicker">Chapter 1 · task in focus</span>Classification</h2>
+    <div class="def"><span class="tag">📌 Definition</span>
+      Given a <b>training set</b> of records where each record has several attributes and <b>one of them is
+      the class</b>, classification finds a <b>model</b> for the class attribute as a function of the other
+      attributes. The goal: assign a class to <b>previously unseen records</b> as accurately as possible. A
+      separate <b>test set</b> measures that accuracy.</div>
+    <div class="analogy"><span class="tag">💡 Think of it like…</span>
+      A tax office deciding whether a return is likely to "cheat". It learns from past returns (with the
+      cheat/no-cheat label known) which combinations of Refund, Marital status and Income tend to cheat, then
+      applies that learned <b>decision tree</b> to a new return whose label is unknown.</div>
+    <p>The workflow: split the data into a <b>training set</b> (build the model) and a <b>test set</b>
+      (validate it), learn a classifier (e.g. a decision tree), then push a new record down the tree to read
+      off its predicted class.</p>
+    <div class="tip"><span class="tag">🎯 Exam tip — the classic contrast</span>
+      <b>Classification is supervised</b> (classes are predefined and the training data is labelled).
+      <b>Clustering is unsupervised</b> (no predefined classes — the groups emerge from similarity). Mixing
+      these up is the single most common mistake here.</div>
+  </section>
+
+  <section id="c1-clustering">
+    <h2><span class="kicker">Chapter 1 · task in focus</span>Clustering</h2>
+    <div class="def"><span class="tag">📌 Definition</span>
+      Given a set of data points (each with attributes) and a <b>similarity measure</b>, clustering finds
+      groups such that points in <b>one cluster are more similar to each other</b>, and points in
+      <b>separate clusters are less similar</b>. There are <b>no predefined classes</b> — the groups are
+      discovered.</div>
+    <div class="hook"><span>Good clustering = <b>intra-cluster distance minimised, inter-cluster distance
+      maximised</b> (tight groups, far apart). For continuous attributes the usual similarity measure is
+      <b>Euclidean distance</b>.</span></div>
+    <div class="example"><span class="tag">✍️ Example — document clustering</span>
+      Goal: group documents that are similar. Approach: find the frequently-occurring terms in each document,
+      build a similarity measure from those term frequencies, and cluster on it. Gain: information retrieval
+      can then relate a new document or search term to the right cluster.</div>
+    <div class="tip"><span class="tag">🎯 Exam tip</span>
+      Clustering is <b>descriptive and unsupervised</b>. If asked "how does clustering differ from
+      classification," lead with: clustering has <b>no class labels</b> — it invents the groups.</div>
+  </section>
+
+  <section id="c1-association">
+    <h2><span class="kicker">Chapter 1 · task in focus</span>Association rule discovery</h2>
+    <div class="def"><span class="tag">📌 Definition</span>
+      Given a set of records, each containing some items from a collection, association rule mining produces
+      <b>dependency rules</b> that predict the occurrence of an item based on the occurrence of others.</div>
+    <div class="analogy"><span class="tag">💡 Think of it like…</span>
+      Supermarket <b>market-basket analysis</b>: looking at thousands of receipts to learn "people who buy
+      X tend to also buy Y", so you can place them together or recommend one from the other.</div>
+    <div class="example"><span class="tag">✍️ Example — the classic baskets</span>
+      From transactions like {Bread, Coke, Milk}, {Beer, Bread}, {Beer, Coke, Diaper, Milk}… the miner
+      discovers rules such as <b>{Milk} → {Coke}</b> and <b>{Diaper, Milk} → {Beer}</b>.</div>
+    <div class="tip"><span class="tag">🎯 Exam tip</span>
+      Association is a <b>descriptive</b> task. The famous (if apocryphal) result to quote is the
+      <b>diaper → beer</b> rule — it shows a pattern nobody would have guessed, which is exactly the point of
+      mining.</div>
+  </section>
+
+  <!-- ==================== CHAPTER 2 · PART A — getting to know your data ==================== -->
   <!-- INTRO -->
   <section id="intro">
-    <h2><span class="kicker">Start here</span>What is "data", really?</h2>
+    <h2><span class="kicker">Chapter 2A · start here</span>What is "data", really?</h2>
     <p>Before we can <em>mine</em> data, we need to agree on what data even looks like. Forget anything
     scary — a dataset is just a <b>table</b>, exactly like an Excel sheet.</p>
     <div class="analogy"><span class="tag">💡 Think of it like…</span>
@@ -972,6 +1180,57 @@ body.rot .rotexit{display:inline-flex;position:fixed;z-index:80;top:9px;right:9p
     <h2><span class="kicker">Test yourself</span>Practice — theory &amp; math (fully worked)</h2>
     <p>The paper is <b>5 marks fill-in-the-blanks + 5 marks short + 10 marks long</b>, and it leans <b>factual</b> — exact terms and formulas. Here's a full set of each — cover the answer, try it,
     then reveal the complete working.</p>
+
+  <div class="tip"><span class="tag">🎯 Follow the suggestion</span>
+    The exam suggestion (from the video) puts <b>Chapter 1</b> first and heavily: <i>why data mining, the
+    definition, DM vs a database query, the multi-dimensional view, KDD steps, applications, DM tasks, and
+    the definitions of classification / clustering / association</i>. Drill this block first — it's pure
+    factual recall, the cheapest marks on the paper.</div>
+
+  <h3 style="margin-top:26px">Chapter 1 · Fill in the blanks <span class="badge b-fill">recall</span></h3>
+  <details><summary><span class="qid">C1</span> Data mining extracts patterns that are non-trivial, implicit, <span class="blank">previously unknown</span> and potentially useful.<span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>previously unknown</b> — the four adjectives are: non-trivial, implicit, previously unknown, potentially useful.</div></details>
+  <details><summary><span class="qid">C2</span> Data mining is also known by the acronym <span class="blank">KDD</span> (Knowledge Discovery from Data).<span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>KDD</b> — Knowledge Discovery from/in Databases.</div></details>
+  <details><summary><span class="qid">C3</span> The core mining step of KDD is preceded by cleaning, integration, selection and <span class="blank">transformation</span><span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>transformation</b> (steps 1–4 = preprocessing).</div></details>
+  <details><summary><span class="qid">C4</span> A database <span class="blank">query</span> only returns already-known stored facts, whereas data mining discovers new patterns.<span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>query</b></div></details>
+  <details><summary><span class="qid">C5</span> The two broad categories of mining tasks are <span class="blank">predictive</span> and <span class="blank">descriptive</span><span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>predictive · descriptive</b></div></details>
+  <details><summary><span class="qid">C6</span> Mapping an item into one of a set of predefined classes is called <span class="blank">classification</span><span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>classification</b></div></details>
+  <details><summary><span class="qid">C7</span> Grouping similar items with no predefined classes is called <span class="blank">clustering</span><span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>clustering</b></div></details>
+  <details><summary><span class="qid">C8</span> Classification is <span class="blank">supervised</span> learning; clustering is <span class="blank">unsupervised</span><span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>supervised · unsupervised</b></div></details>
+  <details><summary><span class="qid">C9</span> Good clustering minimises <span class="blank">intra-cluster</span> distance and maximises <span class="blank">inter-cluster</span> distance.<span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>intra-cluster · inter-cluster</b></div></details>
+  <details><summary><span class="qid">C10</span> Rules like {Diaper, Milk} → {Beer} come from <span class="blank">association</span> rule mining.<span class="badge b-fill">fill</span></summary>
+    <div class="ans"><b>association</b></div></details>
+
+  <h3 style="margin-top:30px">Chapter 1 · Short questions <span class="badge b-short">recall</span></h3>
+  <details><summary><span class="qid">CS1</span> Define data mining. (Give the four key adjectives.)<span class="badge b-short">short</span></summary>
+    <div class="ans">Data mining is the extraction of <b>interesting</b> — <b>non-trivial, implicit, previously unknown and potentially useful</b> — patterns or knowledge from huge amounts of data. It is also called knowledge discovery from data (KDD).</div></details>
+  <details><summary><span class="qid">CS2</span> Differentiate data mining from a database query, with an example.<span class="badge b-short">short</span></summary>
+    <div class="ans">A <b>query</b> retrieves facts that are already stored and known — e.g. looking up a phone number in a directory. <b>Data mining</b> discovers previously unknown patterns — e.g. finding that certain surnames cluster in certain regions. In short: a query returns the known; mining uncovers the implicit.</div></details>
+  <details><summary><span class="qid">CS3</span> List the steps of the KDD (knowledge discovery) process.<span class="badge b-short">short</span></summary>
+    <div class="ans">1. Data cleaning, 2. Data integration, 3. Data selection, 4. Data transformation, 5. <b>Data mining</b> (the core step), 6. Pattern evaluation, 7. Knowledge presentation. Steps 1–4 are preprocessing; data mining itself is one essential step of the whole pipeline.</div></details>
+  <details><summary><span class="qid">CS4</span> Describe the multi-dimensional view of data mining.<span class="badge b-short">short</span></summary>
+    <div class="ans">Data mining is interdisciplinary and can be viewed along four dimensions: the <b>data to be mined</b> (relational, warehouse, transactional, streams, text/web, social), the <b>knowledge/functions</b> (characterization, association, classification, clustering, outlier analysis), the <b>techniques used</b> (machine learning, statistics, pattern recognition, visualization), and the <b>applications</b> (retail, telecom, banking, fraud, biology).</div></details>
+  <details><summary><span class="qid">CS5</span> Distinguish classification from clustering.<span class="badge b-short">short</span></summary>
+    <div class="ans"><b>Classification</b> is predictive and <b>supervised</b>: classes are predefined and the training data is labelled; it learns a model to assign new records to a known class. <b>Clustering</b> is descriptive and <b>unsupervised</b>: there are no predefined classes — it groups objects purely by similarity, so the groups emerge from the data.</div></details>
+  <details><summary><span class="qid">CS6</span> Name the origins of data mining and the challenges it must address.<span class="badge b-short">short</span></summary>
+    <div class="ans">It draws on <b>machine learning / AI, pattern recognition, statistics, and database systems</b>. Beyond those it must handle the <b>enormity (volume)</b> of data, its <b>high dimensionality</b>, and its <b>heterogeneous, distributed</b> nature.</div></details>
+
+  <h3 style="margin-top:30px">Chapter 1 · Long questions <span class="badge b-long">recall</span></h3>
+  <details><summary><span class="qid">CL1</span> Explain the two categories of data-mining tasks and give the tasks under each.<span class="badge b-th">theory</span></summary>
+    <div class="ans"><b>Predictive tasks</b> use some attributes to predict the unknown or future value of another attribute — these are <b>classification</b> (predict a categorical class), <b>regression</b> (predict a real number), and <b>deviation/anomaly detection</b>. <b>Descriptive tasks</b> find human-interpretable patterns that summarise the data — these are <b>association discovery</b> (dependency rules between items), <b>clustering</b> (natural groupings), and <b>summarization</b> (a compact description). Predictive tasks need a target/label; descriptive tasks do not.</div></details>
+  <details><summary><span class="qid">CL2</span> Explain classification with the decision-tree example, naming training vs test set.<span class="badge b-th">theory</span></summary>
+    <div class="ans">Classification builds a <b>model</b> for a class attribute as a function of the other attributes. From a <b>training set</b> (records whose class is known) it learns a classifier — e.g. a <b>decision tree</b> that splits on Refund, then Marital status, then Taxable income to decide "Cheat = Yes/No". A held-out <b>test set</b> (records whose true class is known but hidden from training) measures accuracy. A new, unlabelled record is then pushed down the tree from the root to a leaf, which gives its predicted class. Because the classes are predefined and the data is labelled, classification is <b>supervised</b>.</div></details>
+  <details><summary><span class="qid">CL3</span> What is association rule discovery? Illustrate with market-basket analysis.<span class="badge b-th">theory</span></summary>
+    <div class="ans">Given records that each contain some items from a collection, association mining produces <b>dependency rules</b> predicting the occurrence of one item from others. The classic setting is <b>market-basket analysis</b>: from transactions such as {Bread, Coke, Milk}, {Beer, Bread}, {Beer, Coke, Diaper, Milk}, the miner finds rules like <b>{Milk} → {Coke}</b> and <b>{Diaper, Milk} → {Beer}</b>. Retailers use such rules for product placement and recommendations. It is a <b>descriptive</b> task.</div></details>
+
   <h3 style="margin-top:26px">Part A — Fill in the blanks <span class="badge b-fill">5 marks</span></h3>
   <details><summary><span class="qid">F1</span> A row of a dataset is called a <span class="blank">data object</span> Also: sample, instance, record, data point, tuple.<span class="badge b-fill">fill</span></summary>
     <div class="ans"><b>data object</b></div></details>
@@ -1039,13 +1298,13 @@ body.rot .rotexit{display:inline-flex;position:fixed;z-index:80;top:9px;right:9p
   <h3 style="margin-top:30px">Part C — Long questions <span class="badge b-long">10 marks</span></h3>
   <p style="color:var(--muted);font-size:14px">These are the compute-and-explain questions — the ones below carry the method marks. Show every step.</p>
 
-  <div class="tip"><span class="tag">🎯 Real CT-1 pattern (CSE-4333)</span>
-    The actual CT-1 was a short paper (25 min, ~21 marks) of a <b>few big questions taken straight from
-    Han &amp; Kamber exercises</b> — e.g. <i>"compute the mean, median and standard deviation of age, and
-    draw the boxplot"</i> on a given table (that's the exact question <b>CT‑1&nbsp;Q</b> below). Practise
-    the full <b>compute + draw</b> answer, showing every step.</div>
+  <div class="tip"><span class="tag">🎯 Classic exam pattern (Han &amp; Kamber)</span>
+    A near-guaranteed long question is a <b>big compute-and-draw taken straight from a Han &amp; Kamber
+    exercise</b> — e.g. <i>"compute the mean, median and standard deviation of age, and draw the boxplot"</i>
+    on a given table (that's the exact question <b>Q·box</b> below, matching suggestion exercises 2.2/2.4).
+    Practise the full <b>compute + draw</b> answer, showing every step.</div>
 
-    <details><summary><span class="qid">CT‑1&nbsp;Q</span> <b>[Actual CT-1]</b> A hospital tested age and body-fat
+    <details><summary><span class="qid">Q·box</span> <b>[Han &amp; Kamber 2.4]</b> A hospital tested age and body-fat
       for 18 adults. age = 23,23,27,27,39,41,47,49,50,52,54,54,56,57,58,58,60,61. (i) Calculate the
       mean, median and standard deviation of age. (ii) Draw the boxplot for age.<span class="badge b-math">math</span></summary>
       <div class="ans">
@@ -1157,6 +1416,8 @@ body.rot .rotexit{display:inline-flex;position:fixed;z-index:80;top:9px;right:9p
       <div class="ans">Normalization rescales an attribute's values to a common range (e.g. [0,1]). It's
         needed so that attributes with large units (like income) don't dominate distance/mining
         calculations over small-unit attributes (like age); it gives every attribute equal weight.</div></details>
+    <details><summary><span class="qid">S4b</span> What are the value ranges of the three normalization methods? (Han &amp; Kamber Q2.5)<span class="badge b-short">short</span></summary>
+      <div class="ans"><b>Min-max</b> → exactly the chosen <b>[new_min<sub>A</sub>, new_max<sub>A</sub>]</b> (commonly [0, 1]); it maps the observed min→new_min and max→new_max. <b>Z-score</b> → <b>not bounded</b>; values are re-centred to mean 0 with standard deviation 1, so most fall roughly in [−3, +3] but any real value is possible. <b>Decimal scaling</b> → the open interval <b>(−1, 1)</b>, since we divide by 10<sup>j</sup> until every |v′| &lt; 1.</div></details>
     <details><summary><span class="qid">S5</span> Name the issues to consider during data integration.<span class="badge b-short">short</span></summary>
       <div class="ans"><b>Schema integration / entity identification</b> (matching equivalent entities
         across sources), <b>redundancy</b> (derivable or duplicated attributes, detected by correlation
